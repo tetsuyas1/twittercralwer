@@ -4,6 +4,7 @@ gem 'jruby-openssl', platforms: :jruby
 gem 'rake'
 gem 'yard'
 gem 'twitter'
+gem 'pry-byebug'
 
 group :development do
   gem 'pry'
