@@ -3,6 +3,7 @@ require 'bundler/setup'
 
 require "twitter"
 require 'json'
+
 file = File.read('twitter_secrets.json')
 data_hash = JSON.parse(file)
 
@@ -14,5 +15,5 @@ TWITTER = Twitter::REST::Client.new do |config|
 end
 
 def user_timeline(user_id)
-    TWITTER.user_timeline(user_id,count:1)
+    TWITTER.user_timeline(user_id,count:50)
 end
