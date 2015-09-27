@@ -18,7 +18,7 @@ def rate_limited_user_timeline (user)
   num_attempts = 0
   begin
     num_attempts += 1
-    TWITTER.user_timeline(user,count:40)
+    TWITTER.user_timeline(user,count:10000)
   rescue Twitter::Error::TooManyRequests => error
     if num_attempts % 3 == 0
       sleep(15*60) # minutes * 60 seconds
