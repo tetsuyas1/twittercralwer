@@ -1,7 +1,7 @@
 Dir[File.dirname(__FILE__) + '/config/*.rb'].each {|file| require file }
 require 'pry-byebug'
 
-file = File.new("config/test", "r")
+file = File.new("config/authers", "r")
 
 while (line = file.gets)
 
@@ -9,9 +9,9 @@ while (line = file.gets)
 	fjson = File.new("tweets/#{name}.json", "w")
 	hash = []
 	
-	user_timeline(line).each do |tweet|
+	rate_limited_user_timeline(line).each do |tweet|
 
-		@twitter = TWITTER.status(tweet.id)
+		@twitter = rate_limited_status(tweet.id)
 
 		if @twitter.created_at.year < 2013
 			break
