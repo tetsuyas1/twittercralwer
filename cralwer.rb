@@ -1,32 +1,42 @@
 Dir[File.dirname(__FILE__) + '/config/*.rb'].each {|file| require file }
 require 'pry-byebug'
 
-file = File.new("config/authers", "r")
+file = File.new("config/test", "r")
 
 while (line = file.gets)
 
 	name = line.gsub( /\r\n/m, "\n" )
 	fjson = File.new("tweets/#{name}.json", "w")
 	hash = []
-	
-	rate_limited_user_timeline(line).each do |tweet|
+	flag = 0
 
-		@twitter = rate_limited_status(tweet.id)
+	(1..16).each do |page|
+		
+		rate_limited_user_timeline(line,page).each do |tweet|
 
-		if @twitter.created_at.year < 2013
-			break
-		end	
+			@twitter = rate_limited_status(tweet.id)
 
-		tempHash = {
-    		"status" => @twitter.full_text,
-    		"fav_count" => @twitter.favorite_count.to_s,
-    		"retweet_count" => @twitter.retweet_count.to_s,
-    		"created_at" => @twitter.created_at.to_s
-		}
+			if @twitter.created_at.year < 2013
+				flag = 1 
+				break
+			end	
 
-		hash << tempHash
+			# break if @twitter.created_at.year < 2013
 
-	end
+			tempHash = {
+	    		"status" => @twitter.full_text,
+	    		"fav_count" => @twitter.favorite_count.to_s,
+	    		"retweet_count" => @twitter.retweet_count.to_s,
+	    		"created_at" => @twitter.created_at.to_s
+			}
+
+			hash << tempHash
+
+		end
+
+		break if flag == 1
+
+	end	
 
 	fjson.write(JSON.pretty_generate(hash))
 	fjson.close
